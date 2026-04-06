@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admission Success</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg, #5f2d8e, #f0e8ff);
+  font-family:'Poppins', sans-serif;
+}
+
+.success-box{
+  background:white;
+  padding:40px;
+  border-radius:12px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+.success-icon{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+.success-box h2{
+  color:#5f2d8e;
+  margin-bottom:10px;
+}
+
+.success-box p{
+  color:#555;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.btn{
+  display:block;
+  margin-top:20px;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  font-size:15px;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.download-btn{
+  background:#5f2d8e;
+  color:white;
+}
+
+.home-btn{
+  background:#eee;
+  color:#333;
+}
+
+.btn:hover{
+  opacity:0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="success-box">
+  <div class="success-icon">✅</div>
+
+  <h2>Admission Submitted</h2>
+
+  <div class="success-text">
+
+  <p><strong>Thank you for submitting your details to Ariyava School.</strong></p>
+
+  <p>Your application is now being processed by our admissions team.</p>
+
+  <h4>What’s next?</h4>
+
+  <p>
+    One of our admissions officers will call you shortly at the phone number you provided 
+    to discuss your application and answer any questions.
+  </p>
+
+  <p>Please ensure you are available to take the call.</p>
+
+  <p>
+    Have questions right now? Feel free to contact our front office:<br>
+    <strong>80562 41427, 95143 57140, 76959 95389, 93458 97359</strong>
+  </p>
+
+  <p><strong>We look forward to speaking with you soon!</strong></p>
+
+  <p style="margin-top:10px;">
+    Best regards,<br>
+    <strong>The Ariyava Admissions Team</strong>
+  </p>
+
+</div>
+
+
+
+  <!-- ✅ DOWNLOAD BUTTON -->
+  <a id="downloadBtn" class="btn download-btn">Download Application PDF</a>
+
+  <!-- BACK -->
+  <a href="/" class="btn home-btn">Back to Home</a>
+</div>
+
+<script>
+  // ✅ Get ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if(id){
+    document.getElementById("downloadBtn").href = "/download-user-pdf/" + id;
+  }
+</script>
+
+</body>
+</html>

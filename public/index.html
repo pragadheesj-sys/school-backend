@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ariyava Montessori Matriculation Higher Secondary School</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+  <!-- POPUP -->
+  <div id="popup" class="popup-overlay">
+    <div class="popup-card">
+
+      <!-- Close Button -->
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+
+      <!-- Content -->
+      <h2>Admissions Open</h2>
+      <p>Admissions for 2026–27 Academic Year are now open.</p>
+
+      <!-- Button -->
+      <a href="form.html" class="btn-gold">Apply for Admissions</a>
+
+    </div>
+  </div>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span>📞 +91 80562 41427</span>
+      <span>✉️ ariyavaschool@gmail.com</span>
+    </div>
+    <div class="topbar-right">
+      <a href="#notices">📢 Announcements</a>
+      <a href="#contact">Blog</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-brand">
+      <a href="URL_OF_DESTINATION_PAGE">
+        <img src="images/logo.jpeg" width="50" height="50" work alt="Description of the image">
+      </a>
+      <div class="nav-brand-text">
+        <strong>Ariyava Montessori</strong>
+        <span>Mat. Hr. Sec. School · Madappuram 630 611</span>
+      </div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li class="active"><a href="#home">Home</a></li>
+      <li>
+        <a href="#about">About Us ▾</a>
+        <div class="dropdown">
+          <a href="#about">Our Institution</a>
+          <a href="#">Annual Report</a>
+          <a href="#">Mandatory Disclosure</a>
+        </div>
+      </li>
+      <li>
+        <a href="#academics">Education ▾</a>
+        <div class="dropdown">
+          <a href="#">Primary School</a>
+          <a href="#">Middle School</a>
+          <a href="#">SSLC (Class X)</a>
+          <a href="#">Higher Secondary</a>
+          <a href="#">Clubs & Activities</a>
+        </div>
+      </li>
+      <li><a href="#staff">Staff</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Careers</a></li>
+      <li><a href="#notices">News</a></li>
+      <li><a href="form.html" class="nav-cta">Admissions</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- DISCLOSURE STRIP -->
+  <div class="disclosure-strip">
+    <div class="scroll">
+      <span>
+        📋 <a href="#">MANDATORY PUBLIC DISCLOSURE</a> | Admissions Open for 2026–27 Academic Year
+      </span>
+      <span>
+        📋 <a href="#">MANDATORY PUBLIC DISCLOSURE</a> | Admissions Open for 2026–27 Academic Year
+      </span>
+    </div>
+  </div>
+
+  <!-- HERO SLIDER -->
+  <div class="hero-slider" id="home">
+    <!-- Slide 1: School photo -->
+    <div class="slide active" id="slide0">
+      <div class="slide-bg" style="background-image:url('images/slide1.jpeg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-tag">✦ Welcome to Ariyava</div>
+        <h1 class="slide-title">Ariyava <span>Montessori</span><br>School — Madappuram</h1>
+        <p class="slide-sub">A place where young minds are nurtured, values are built, and futures are shaped with
+          excellence.</p>
+        <div class="slide-btns">
+          <a href="#contact" class="btn-gold">Apply for Admission</a>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="slide" id="slide1">
+      <div class="slide-bg" style="background-image:url('images/slide2.jpeg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-tag">🎓 Academic Excellence</div>
+        <h1 class="slide-title"><span>International Level</span><br>Education</h1>
+        <p class="slide-sub">Montessori values meet modern matriculation rigour — delivering 100% board results year
+          after year.</p>
+        <div class="slide-btns">
+          <a href="#contact" class="btn-gold">Apply for Admission</a>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="slide" id="slide2">
+      <div class="slide-bg" style="background-image:url('images/slide3.jpeg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="slide-tag">🌟 Best Education</div>
+        <h1 class="slide-title">For Your <span>Better</span><br>Future</h1>
+        <p class="slide-sub">20 years of trust. 1000+ students. A legacy of nurturing tomorrow's leaders inMadappuram,
+          Tamil Nadu.</p>
+        <div class="slide-btns">
+          <a href="form.html" class="btn-gold">Apply for Admission</a>
+        </div>
+      </div>
+    </div>
+    <!-- Controls -->
+    <div class="slider-dots">
+      <div class="dot active" onclick="goSlide(0)"></div>
+      <div class="dot" onclick="goSlide(1)"></div>
+      <div class="dot" onclick="goSlide(2)"></div>
+    </div>
+    <div class="slider-arrows">
+      <button class="arrow-btn" onclick="prevSlide()">&#8592;</button>
+      <button class="arrow-btn" onclick="nextSlide()">&#8594;</button>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-wrap reveal">
+          <div class="about-img-main">
+            <img src="images/slide1.jpeg" alt="Campus">
+          </div>
+          <div class="about-badge-box">
+            <strong>20+</strong>
+            <span>Years of Excellence</span>
+          </div>
+        </div>
+        <div class="about-text reveal">
+          <span class="section-tag">ARIYAVA MONTESSORI</span>
+          <h2 class="section-title">About Our <span>Institution</span></h2>
+          <div class="section-line" style="margin-left:0;"></div>
+          <p>Ariyava Montessori Matriculation Higher Secondary School, Madappuram, is a premier educational institution
+            dedicated to holistic development. Rooted in the timeless Montessori philosophy, we blend child-centered
+            learning with the rigour of the Tamil Nadu Matriculation Board.</p>
+          <p>With over 20 years of trust, we have shaped more than a generation of students into confident,
+            compassionate, and capable individuals ready to face the world.</p>
+          <div class="about-features">
+            <div class="af-item">Montessori Approach</div>
+            <div class="af-item">Smart Classrooms</div>
+            <div class="af-item">Experienced Faculty</div>
+            <div class="af-item">Wi-Fi Campus</div>
+            <div class="af-item">100% Board Results</div>
+            <div class="af-item">Sports & Culture</div>
+          </div>
+          <a href="#contact" class="about-cta">Know More →</a>
+        </div>
+      </div>
+      <section id="school-rules">
+        <div class="container">
+          <div class="rules-grid">
+
+            <!-- Card 1 -->
+            <div class="rules-card reveal">
+              <h3>Student Behaviour & Conduct</h3>
+              <ul>
+                <li>Students are expected to be polite, respectful, and obedient to teachers and staff. Bullying,
+                  fighting, using foul language, or shouting is strictly prohibited.</li>
+                <li>Regular attendance is mandatory, often with a minimum percentage (e.g., 80% or higher) required.
+                  Late arrivals are often penalized with fines or detention.</li>
+                <li>Students must wear the prescribed, clean, and ironed uniform. Strict grooming standards, such as
+                  short hair for boys and neatly tied hair for girls, are enforced.</li>
+              </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="rules-card reveal">
+              <h3>Campus & Academic Policies</h3>
+              <ul>
+                <li>Mobile phones, smartwatches, and other electronic gadgets are generally banned or must be switched
+                  off, and are often confiscated if found.</li>
+                <li>Cheating, plagiarism, or malpractice in tests and assignments is forbidden.</li>
+                <li>Students must not damage school property, such as furniture or walls, and must keep the campus
+                  clean.</li>
+                <li>Bringing valuable items, fancy stationery, jewellery, or sharp objects to school is forbidden.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Why Choose Us</span>
+        <h2 class="section-title" style="color:#fff;">Our <span style="color:#D4AF37;">Features</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="features-grid">
+        <div class="feat-card reveal">
+          <div class="feat-icon">🚰</div>
+          <h4>RO Water System</h4>
+          <p>Pure, safe drinking water available throughout campus at all times.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🏟️</div>
+          <h4>Large Playground</h4>
+          <p>Spacious grounds for athletics, team sports, and outdoor play.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🚌</div>
+          <h4>Transport Facility</h4>
+          <p>Safe and reliable bus service covering all areas of Madappuram.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">📶</div>
+          <h4>Wi-Fi Campus</h4>
+          <p>High-speed internet enabling digital learning across classrooms.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">📺</div>
+          <h4>Smart Classes</h4>
+          <p>Interactive smart boards and multimedia-enabled learning rooms.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">👩‍🏫</div>
+          <h4>Expert Staff</h4>
+          <p>Highly qualified, experienced, and passionate educators.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">❄️</div>
+          <h4>Air-conditioned Class Room For Kindergarden</h4>
+          <p>Cool, focused AC classrooms for kindergarteners.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">❄️</div>
+          <h4>Air-conditioned Transport</h4>
+          <p>Safe and comfortable AC transport for your child.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🍽️</div>
+          <h4>Hygienic Canteen</h4>
+          <p>Fresh, hygienic, and nutritious meals under strict supervision.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-icon">🤖</div>
+          <h4>Robotics and Foreign Language Club</h4>
+          <p>Build, code, and innovate with modern technology.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section id="facilities">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Infrastructure</span>
+        <h2 class="section-title">Our <span>Facilities</span></h2>
+        <div class="section-line"></div>
+        <p class="section-desc">World-class infrastructure designed to support every dimension of student growth —
+          academic, creative, and physical.</p>
+      </div>
+      <div class="facilities-grid">
+        <div class="fac-card reveal">
+          <div class="fac-img c1">💻</div>
+          <div class="fac-body">
+            <h4>Computer Lab</h4>
+            <p>Air-conditioned lab with latest computers, projectors, and high-speed internet for digital literacy.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c2">⚗️</div>
+          <div class="fac-body">
+            <h4>Chemistry Lab</h4>
+            <p>Well-equipped with modern instruments and safety standards for practical science learning.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c3">🔭</div>
+          <div class="fac-body">
+            <h4>Physics Lab</h4>
+            <p>Highly calibrated instruments in a well-furnished lab environment for experimental learning.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c4">📚</div>
+          <div class="fac-body">
+            <h4>AC Library</h4>
+            <p>Air-conditioned library with a vast collection of books, journals, and digital resources.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c5">🎨</div>
+          <div class="fac-body">
+            <h4>Arts Studio</h4>
+            <p>Dedicated creative space for fine arts, crafts, music, and cultural expression.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c6">🏃</div>
+          <div class="fac-body">
+            <h4>Sports Ground</h4>
+            <p>Expansive outdoor ground for cricket, football, athletics, and all major sports.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c7">🧬</div>
+          <div class="fac-body">
+            <h4>Biology Lab</h4>
+            <p>Modern lab for hands-on learning and exploring life sciences.</p>
+          </div>
+        </div>
+        <div class="fac-card reveal">
+          <div class="fac-img c8">🎧</div>
+          <div class="fac-body">
+            <h4>Language Lab</h4>
+            <p>Interactive digital lab to improve speaking, listening, and pronunciation skills.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <span class="stat-icon">👩‍🏫</span>
+          <span class="stat-num" data-target="50" data-suffix="+">50+</span>
+          <span class="stat-label">Teachers</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-icon">👧</span>
+          <span class="stat-num" data-target="480" data-suffix="+">480+</span>
+          <span class="stat-label">Girls</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-icon">👦</span>
+          <span class="stat-num" data-target="520" data-suffix="+">520+</span>
+          <span class="stat-label">Boys</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-icon">🎓</span>
+          <span class="stat-num" data-target="1000" data-suffix="+">1000+</span>
+          <span class="stat-label">Total Students</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTICES -->
+  <section id="notices">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Latest Updates</span>
+        <h2 class="section-title">News & <span>Announcements</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="notices-layout">
+        <div class="notice-box reveal">
+          <div class="notice-header"><span>📢</span>
+            <h3>Announcements</h3>
+          </div>
+          <div class="notice-body">
+            <div class="notice-item">
+              <div class="notice-date"><strong>26</strong><span>Jan</span></div>
+              <div class="notice-info">
+                <h5>Graduation Day 2026</h5>
+                <p>Celebrating Our Graduates' Achievements and Aspirations</p>
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date"><strong>27</strong><span>Jan</span></div>
+              <div class="notice-info">
+                <h5>Annual Day Celebration 2026</h5>
+                <p>Grand cultural evening with prize distribution for all students.</p>
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date"><strong>15</strong><span>Jun</span></div>
+              <div class="notice-info">
+                <h5>New Academic Year 2026–27</h5>
+                <p>Classes commence with orientation for new students.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notice-box reveal">
+          <div class="notice-header"><span>🏆</span>
+            <h3>Achievements</h3>
+          </div>
+          <div class="notice-body">
+            <div class="notice-item">
+              <div class="notice-date" style="background:#fff8e1;color:#b8941f;"><strong>100</strong><span>%</span>
+              </div>
+              <div class="notice-info">
+                <h5>Board Exam Results 2025</h5>
+                <p>All Class X and XII students passed the board exams with distinction.</p>
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date" style="background:#e8f5e9;color:#2e7d32;"><strong>1st</strong><span>Rank</span>
+              </div>
+              <div class="notice-info">
+                <h5>District Science Fair</h5>
+                <p>Our students secured top honours at the inter-school science fair.</p>
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date" style="background:#fce4ec;color:#c62828;"><strong>🥇</strong><span>Award</span>
+              </div>
+              <div class="notice-info">
+                <h5>Sports Excellence Award</h5>
+                <p>Best school award at the district-level athletics championship.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="grid-container">
+        <div class="grid-item"><img src="images/news/1.jpeg" alt="Photo 1"></div>
+        <div class="grid-item"><img src="images/news/2.jpeg" alt="Photo 2"></div>
+        <div class="grid-item"><img src="images/news/4.jpeg" alt="Photo 3"></div>
+        <div class="grid-item"><img src="images/news/7.jpeg" alt="Photo 4"></div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Campus Life</span>
+        <h2 class="section-title">Photo <span>Gallery</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="gallery-mosaic reveal">
+        <img src="images/1.jpeg" alt="" class="big">
+
+        <img src="images/2.jpeg" alt="" class="">
+        <img src="images/sport.jpeg" alt="" class="">
+        <img src="images/3.jpeg" alt="" class="">
+        <img src="images/4.jpeg" alt="" class="">
+        <img src="images/5.jpeg" alt="" class="">
+        <img src="images/6.jpeg" alt="" class="">
+
+      </div>
+      <div class="gallery-mosaic1 reveal">
+
+        <!-- LEFT: 6 SMALL -->
+        <div class="small-group">
+          <img src="images/9.jpeg">
+          <img src="images/10.jpeg">
+          <img src="images/11.jpeg">
+          <img src="images/12.jpeg">
+          <img src="images/14.jpeg">
+          <img src="images/15.jpeg">
+        </div>
+
+        <!-- RIGHT: BIG -->
+        <img src="images/8.jpeg" class="big">
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STAFF -->
+  <section id="staff" style="background:#fff;padding:5rem 2rem;">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Our <span>Executive Directory</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <!-- TOP SECTION -->
+      <div class="top-section">
+
+        <!-- LEFT CARD -->
+        <div class="profile-card">
+          <img src="images/secretary.jpeg" alt="Secretary">
+          <h3>DR.M.KESAVAPANDIAN,</h3>
+          <p>SECRETARY</p>
+        </div>
+
+        <!-- RIGHT CARD -->
+        <div class="message-card">
+          <p>
+            At Ariyava, we believe that true education goes beyond textbooks; it is about building character and
+            supporting every child's journey, regardless of the hurdles they face.
+
+            <br><br>
+
+            As the Secretary, I am proud to oversee an institution that stands on three pillars: Academic Brilliance,
+            Athletic Excellence, and Social Responsibility. We are deeply committed to providing world-class education
+            and professional sports training to all our students.
+
+            <br><br>
+
+            However, our heart lies in our mission to support children battling illness. We strive to ensure that health
+            challenges never stand in the way of a child's potential. By fostering an inclusive environment of care and
+            high standards, we prepare our students to not only succeed in their careers but to lead with kindness.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- BOTTOM SECTION -->
+      <div class="bottom-section">
+
+        <div class="profile-card">
+          <img src="images/asst secretary.jpeg" alt="Secretary">
+          <h4>MRS.G.ARUNA PRABHU,</h4>
+          <p>ASSISTANT SECRETARY</p>
+        </div>
+
+        <div class="profile-card">
+          <img src="images/senior principal.jpeg" alt="Secretary">
+          <h4>MR.S.KANNAN</h4>
+          <p>SENIOR PRINCIPAL</p>
+        </div>
+
+        <div class="profile-card">
+          <img src="images/principal.png" alt="Secretary">
+          <h4>MR.V.DHANABALAN</h4>
+          <p>PRINCIPAL</p>
+        </div>
+
+      </div>
+    </div>
+    <!-- TEACHER SECTION -->
+    <div style="margin-top: 50px;" class="section-header reveal">
+      <span class="section-tag">OUR EDUCATORS</span>
+      <h2 class="section-title">Meet Our <span>Teachers</span></h2>
+      <div class="section-line"></div>
+      <p class="section-desc">Our dedicated faculty bring decades of teaching experience, passion, and care to every
+        classroom.</p>
+    </div>
+    <div class="teacher-grid">
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/uma Maheswari d.png" alt="Teacher 1">
+        <h3>MRS.D.UMAMAHESHWARI.M.Se.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/sujatha.png" alt="Teacher 1">
+        <h3>MRS.R.SUJATHA.M.Se.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/kangadevi.png" alt="Teacher 1">
+        <h3>MRS.V.KANAGADEVI.D.T.Ed., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/santhanalakshmi.png" alt="Teacher 1">
+        <h3>MRS.SANTHALAKSHMI.B.A.,D.T.Ed., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/datchayani.png" alt="Teacher 1">
+        <h3>MRS.M.DHATCHAYANI.M.COM.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/ponmalar.png" alt="Teacher 1">
+        <h3>MRS.PONMALAR.M.COM.,B.Ed.,M.Phil</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/gents/ramesh kumar .png" alt="Teacher 3">
+        <h3>MR.E.RAMESHKUMAR M.SC., B.ED.,</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/gents/muniraj.png" alt="Teacher 3">
+        <h3>MR.M.MUNIYARAJ M.A., B.ED., M.PHIL.,</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.k.kamala nehru .png" alt="Teacher 1">
+        <h3>MRS.K.KAMALA NEHRU.B.A., DMT., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.s.geetha.png" alt="Teacher 1">
+        <h3>MRS.S.GEETHA.M.A.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/kalanithi.png" alt="Teacher 1">
+        <h3>MRS.KALANITHI.M.A.,D.EI.Ed., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/sam manju.png" alt="Teacher 1">
+        <h3>K.A.SAM MANJU.M.A.,B.Ed.,M.Phil</h3>
+        <p>PG ASST</p>
+      </div>
+
+      <div class="teacher-card">
+        <img src="images/teachers/gents/b.raja.png" alt="Teacher 3">
+        <h3>MR.B.RAJA M.SC., B.ED.,</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/uma mahesawri.png" alt="Teacher 1">
+        <h3>MRS.K.UMA MAHESHWARI.M.COM., B.Ed.,D.EL.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/sundara devi.png" alt="Teacher 1">
+        <h3>A.SUNDARA DEVI.M.COM.,B.Ed.,D.El.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/manonmani.png" alt="Teacher 1">
+        <h3>S.MANONMANI.B.A.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/sivaptiaya.png" alt="Teacher 1">
+        <h3>MRS.B.SIVAPRIYA.B.A.,B.Ed., </h3>
+        <p>BT ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.k.ramya.png" alt="Teacher 1">
+        <h3>MRS.K.RAMYA.B.Sc.,D.T.Ed., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.k.packiyam .png" alt="Teacher 1">
+        <h3>MRS.K.PACKIYAM.B.A.,D.T.E., </h3>
+        <p>PRIMARY TEACHER </p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/gents/k. vinothpandi .png" alt="Teacher 2">
+        <h3>MR.K.VINOTHPANDI M.A., B.ED.,</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/gents/arunprathap.png" alt="Teacher 1">
+        <h3>MR.S.ARUNPRADAP B.SC., B.ED.,</h3>
+        <p>BT ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/gents/kannan.png" alt="Teacher 1">
+        <h3>MR.P>KANNAN M.A., B.ED.,</h3>
+        <p>PG ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/miss.s.sabitha .png" alt="Teacher 1">
+        <h3>MISS.S.SABITHA.B.Sc.,B.Ed., </h3>
+        <p>BT ASST</p>
+      </div>
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/kaviktha r.png" alt="Teacher 1">
+        <h3>MRS.R.KAVITHA.B.A.,B.Ed., </h3>
+        <p>BT ASST</p>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/gents/mr.k.jayakanthan.png" alt="Teacher 1">
+        <h3>MR.K.JAYAKANTHAN M.C.A., B.ED.,</h3>
+        <p>PG ASST</p>
+      </div>
+
+
+
+
+
+
+
+
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.j.ananthi.png" alt="Teacher 1">
+        <h3>MRS.J.ANANTHI.B.A., </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/mrs.c.akilandeswari.png" alt="Teacher 1">
+        <h3>MRS.C.AKILANDESHWARI.B.A.,DMT </h3>
+        <p>PRIMARY TEACHER</p>
+      </div>
+
+
+
+
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/kaviya.png" alt="Teacher 1">
+        <h3>MRS.K.KAVIYA.B.A.,B.Ed., </h3>
+        <p>BT ASST</p>
+      </div>
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/aiswarya.png" alt="Teacher 1">
+        <h3>MRS.A.AISWARYA.M.A.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+
+
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/manikandadevi.png" alt="Teacher 1">
+        <h3>B.MANIKANDADEVILM.Sc.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+
+
+      <div class="teacher-card">
+        <img src="images/teachers/ladies/maheswari.png" alt="Teacher 1">
+        <h3>MRS.L.MAHESHWARI.M.A.,B.Ed., </h3>
+        <p>PG ASST</p>
+      </div>
+
+
+    </div>
+
+
+    <!-- Repeat more teacher-card divs up to 25 for 5x5 grid -->
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="background:#f9f7ff;">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Reach Us</span>
+        <h2 class="section-title">Contact <span>Us</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-layout">
+        <div class="contact-cards reveal">
+          <div class="ccard">
+            <div class="cicon">📍</div>
+            <div class="ccard-text">
+              <h4>Address</h4>
+              <p>ARIYAVA MONTESSORI MATRICULATION HIGHER SECONDARY SCHOOL,
+                MADAPPURAM - 630-611</p>
+            </div>
+          </div>
+          <div class="ccard">
+            <div class="cicon">📞</div>
+            <div class="ccard-text">
+              <h4>Phone</h4>
+              <p>+91 80562 41427</p>
+            </div>
+          </div>
+          <div class="ccard">
+            <div class="cicon">✉️</div>
+            <div class="ccard-text">
+              <h4>Email</h4>
+              <p>ariyavaschool@gmail.com</p>
+              <p>info@ariyavaschool.edu.in</p>
+            </div>
+          </div>
+          <div class="ccard">
+            <div class="cicon">🕐</div>
+            <div class="ccard-text">
+              <h4>School Hours</h4>
+              <p>Mon–Fri: 8:30 AM – 4:30 PM<br>Saturday: 8:30 AM – 1:00 PM</p>
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,#5B2D8E,#2D0A4E);border-radius:10px;padding:1.5rem;color:#fff;">
+            <p
+              style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:#D4AF37;font-weight:700;margin-bottom:0.5rem;">
+              Connect With Us</p>
+            <div class="social-row">
+              <a class="social-icons" href="https://www.facebook.com/ariyavamatricschool" title="Facebook"><i
+                  class="fab fa-facebook"></i></a>
+              <a class="social-icons"
+                href="https://www.instagram.com/ariyavaschool?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==   "
+                title="Instagram"><i class="fab fa-instagram"></i></a>
+              <a class="social-icons" href="https://youtube.com/@ariyavaschool172?si=_cML6U2JIwZ58rer  "
+                title="YouTube"><i class="fab fa-youtube"></i></a>
+              <a class="social-icons" href="https://wa.me/918056241427" title="WhatsApp"><i
+                  class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE MAP -->
+  <div class="map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3931.1743218771217!2d78.26299589999999!3d9.8357221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00dd0934b9f885%3A0xbb293f0e799c9259!2sAriyava%20Montessori%20Matric%20Higher%20Secondary%20School%2C%20Thirupuvanam!5e0!3m2!1sen!2sin!4v1774441515078!5m2!1sen!2sin"
+      width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="images/logo.jpeg" alt="logo">
+          <span><strong style="color:#ddd;font-size:0.95rem;">Ariyava Montessori</strong><br>Mat. Hr. Sec. School</span>
+        </div>
+        <p style="color:white">Dedicated to nurturing the leaders of tomorrow through excellence in education,
+          character, and community values — serving Madappuram for over 20 years.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Useful Links</h5>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#">Annual Report</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#notices">News & Events</a></li>
+          <li><a href="#">Circulars</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Programmes</h5>
+        <ul>
+          <li><a href="#">Primary School</a></li>
+          <li><a href="#">Middle School</a></li>
+          <li><a href="#">SSLC (Class X)</a></li>
+          <li><a href="#">Higher Secondary</a></li>
+          <li><a href="#">Extra-Curricular</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact footer-col">
+        <h5>Get In Touch</h5>
+        <p style="color:white">📍 ARIYAVA MONTESSORI MATRICULATION HIGHER SECONDARY SCHOOL, <br>MADAPPURAM,
+          THIRUPPUVANAM - 630 611<br>SIVAGANGAI DIST, TAMILNADU, INDIA</p>
+        <p style="font-size:18px;font-weight: bold;  ">📞 <strong>+91 80562 41427</strong></p>
+        <p>✉️ <strong>ariyavaschool@gmail.com</p>
+        <p> <strong>info@ariyavaschool.edu.in</strong></p>
+        <div class="social-row">
+          <a class="social-icons" href="https://www.facebook.com/ariyavamatricschool" title="facebook"><i
+              class="fab fa-facebook"></i></a>
+          <a class="social-icons"
+            href="https://www.instagram.com/ariyavaschool?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==   "
+            title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a class="social-icons" href="https://youtube.com/@ariyavaschool172?si=_cML6U2JIwZ58rer  " title="YouTube"><i
+              class="fab fa-youtube"></i></a>
+          <a class="social-icons" href="https://wa.me/918056241427"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Ariyava Montessori Matriculation Higher Secondary School, MADAPPURAM - 630 611. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── SLIDER ──
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+    let cur = 0, total = 3, autoTimer;
+    function goSlide(n) {
+      document.getElementById('slide' + cur).classList.remove('active');
+      document.querySelectorAll('.dot')[cur].classList.remove('active');
+      cur = (n + total) % total;
+      document.getElementById('slide' + cur).classList.add('active');
+      document.querySelectorAll('.dot')[cur].classList.add('active');
+    }
+    function nextSlide() { goSlide(cur + 1); resetAuto(); }
+    function prevSlide() { goSlide(cur - 1); resetAuto(); }
+    function resetAuto() { clearInterval(autoTimer); autoTimer = setInterval(() => goSlide(cur + 1), 5000); }
+    autoTimer = setInterval(() => goSlide(cur + 1), 5000);
+
+    // ── HAMBURGER ──
+    document.getElementById('hamburger').onclick = function () {
+      document.getElementById('navLinks').classList.toggle('open');
+    };
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.onclick = () => document.getElementById('navLinks').classList.remove('open');
+    });
+
+    // ── SCROLL REVEAL ──
+    const revObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    // ── COUNTER ──
+    function animateCounter(el, target) {
+      let count = 0; const step = target / 70;
+      const t = setInterval(() => {
+        count += step;
+        if (count >= target) { el.textContent = target + (el.dataset.suffix || ''); clearInterval(t); }
+        else { el.textContent = Math.floor(count) + (el.dataset.suffix || ''); }
+      }, 22);
+    }
+    document.querySelectorAll('.stat-num').forEach(el => {
+      const target = parseInt(el.dataset.target);
+      const obs2 = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { animateCounter(el, target); obs2.disconnect(); }
+      });
+      obs2.observe(el);
+    });
+
+    // ── FORM ──
+    function submitEnquiry(event) {
+  const form = document.getElementById("formWrap");
+
+  // Wait for form to submit to Google
+  setTimeout(() => {
+    form.style.display = "none";
+    document.getElementById("formOk").style.display = "block";
+  }, 1000);
+}
+    // ── NAV ACTIVE ON SCROLL ──
+    const sections = document.querySelectorAll('section[id], div[id="home"]');
+    window.addEventListener('scroll', () => {
+      let cur2 = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur2 = s.id; });
+      document.querySelectorAll('.nav-links > li > a').forEach(a => {
+        a.parentElement.classList.toggle('active', a.getAttribute('href') === '#' + cur2);
+      });
+    });
+  </script>
+</body>
+
+</html>
