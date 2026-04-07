@@ -210,7 +210,7 @@ app.get("/download-pdf/:id", (req, res) => {
   doc.pipe(res);
 
   // ✅ FONT (Tamil Support)
-  doc.font("./fonts/NotoSansTamil-Regular.ttf");
+  doc.font("/fonts/NotoSansTamil-Regular.ttf");
 
   // ================= HEADER =================
   doc
@@ -321,7 +321,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.save();
 
   doc.opacity(0.5)
-     .image("./public/images/logo.jpeg", 
+     .image("/images/logo.jpeg", 
        doc.page.width / 2 - 175,
        doc.page.height / 2 - 175,
        { width: 350 }
@@ -330,7 +330,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.restore();
 
   // FONT
-  doc.font("./fonts/NotoSansTamil-Regular.ttf");
+  doc.font("/fonts/NotoSansTamil-Regular.ttf");
 
   // HEADER
   doc.fontSize(20).fillColor("#5f2d8e")
