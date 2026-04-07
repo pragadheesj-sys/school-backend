@@ -2,8 +2,8 @@
   "name": "school-site",
   "version": "1.0.0",
   "engines": {
-  "node": "18.x"
-},
+    "node": "18.x"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,13 +14,13 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "better-sqlite3": "^12.8.0",
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "pdfkit": "^0.18.0",
-    "razorpay": "^2.9.6",
-    "sqlite3": "^6.0.1"
+    "razorpay": "^2.9.6"
   }
 }
