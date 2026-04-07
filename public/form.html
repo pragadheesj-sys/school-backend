@@ -271,7 +271,7 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const res = await fetch("/create-order", {
+  const res = await fetch("https://api.ariyava.in/create-order", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(data)
@@ -287,7 +287,7 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
 
     handler: async function (response) {
 
-  const verifyRes = await fetch("/verify-payment", {
+  const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({

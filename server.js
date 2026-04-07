@@ -3,8 +3,13 @@ const Razorpay = require("razorpay");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 
+
+
 const app = express();
 const session = require("express-session");
+
+const cors = require("cors");
+app.use(cors());
 
 app.use(session({
   secret: "mysecretkey",
@@ -316,7 +321,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.save();
 
   doc.opacity(0.5)
-     .image("D:/school site/public/images/logo.jpeg", 
+     .image("./public/images/logo.jpeg", 
        doc.page.width / 2 - 175,
        doc.page.height / 2 - 175,
        { width: 350 }
@@ -325,7 +330,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.restore();
 
   // FONT
-  doc.font("D:/school site/fonts/NotoSansTamil-Regular.ttf");
+  doc.font("./fonts/NotoSansTamil-Regular.ttf");
 
   // HEADER
   doc.fontSize(20).fillColor("#5f2d8e")
