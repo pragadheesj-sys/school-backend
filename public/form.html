@@ -92,8 +92,8 @@ input[type="radio"]{
 
 .radio-group{
   display:flex;
-  flex-direction:column;   /* vertical */
-  align-items:flex-start;  /* LEFT ALIGN ✅ */
+  flex-direction:column;
+  align-items:flex-start;
   gap:10px;
   margin-top:5px;
 }
@@ -102,12 +102,12 @@ input[type="radio"]{
   display:flex;
   align-items:center;
   gap:8px;
-  width:100%;              /* full width */
+  width:100%;
   cursor:pointer;
 }
 
 /* BUTTON */
-button{
+#submitBtn{
   width:100%;
   padding:12px;
   background:#5f2d8e;
@@ -120,8 +120,15 @@ button{
   transition:0.3s;
 }
 
-button:hover{
+#submitBtn:hover:not(:disabled){
   background:#562987;
+}
+
+/* ✅ FIX: disabled state so user cannot click again */
+#submitBtn:disabled{
+  background:#aaa;
+  cursor:not-allowed;
+  opacity:0.7;
 }
 
 </style>
@@ -136,7 +143,6 @@ button:hover{
 
 <div class="fgroup">
 <label>Student's Full Name (As per Birth Certificate/Aadhaar) <br>
-
  மாணவரின் முழுப் பெயர் (பிறப்புச் சான்றிதழ்/ஆதார் படி)
 </label>
 <input type="text" name="name" required>
@@ -179,7 +185,6 @@ button:hover{
 
 <div class="fgroup">
 <label>Please enter the 12-digit Aadhar number of the child. <br>
-
  (குழந்தையின் 12 இலக்க ஆதார் எண்ணை உள்ளிடவும்.)
 </label>
 <input type="number" name="aadhar" required>
@@ -214,7 +219,6 @@ button:hover{
 
 <div class="fgroup">
 <label>In case of Class 11 admission, please select the preferred stream: <br>
-
  11 ஆம் வகுப்பு சேர்க்கைக்கு, தயவுசெய்து விருப்பமான பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்: </label>
 <div class="radio-group">
 <label><input type="radio" name="group" value="Biomaths"> BIO MATHS(MATHS , PHYSICS , CHEMISTRY  & BIOLOGY)</label>
@@ -226,7 +230,6 @@ button:hover{
 
 <div class="fgroup">
 <label>Name of Previous School Attended (If applicable, for Class 1 onwards) <br> 
-
 (முன்பு படித்த பள்ளியின் பெயர் 1 ஆம் வகுப்பு முதல்)
 </label>
 <input type="text" name="old_school">
@@ -234,7 +237,6 @@ button:hover{
 
 <div class="fgroup">
 <label>How did you hear about our school? <br>  
-
 எங்கள் பள்ளியைப் பற்றி எப்படிக் கேள்விப்பட்டீர்கள்?
 </label>
 <select name="referal">
@@ -251,12 +253,12 @@ button:hover{
 
 <div class="fgroup">
 <label>Were you are referred to us by someone  referred by a Ariyava teacher or Staff please mention their name. <br>
-
 அரியவா ஆசிரியர் அல்லது ஊழியர்களால் யாராவது உங்களை எங்களுக்கு பரிந்துரைத்தால், தயவுசெய்து அவர்களின் பெயரைக் குறிப்பிடவும்.</label>
 <input type="text" name="teacher">
 </div>
 
-<button type="submit">Apply & Pay</button>
+<!-- ✅ FIX: button with id so JS can disable it -->
+<button type="submit" id="submitBtn">Apply & Pay</button>
 
 </form>
 </div>
@@ -268,25 +270,48 @@ button:hover{
 document.getElementById("admissionForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const btn = document.getElementById("submitBtn");
+
+  // ✅ FIX: disable button immediately to prevent multiple clicks
+  btn.disabled = true;
+  btn.textContent = "Please wait...";
+
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const res = await fetch("https://api.ariyava.in/create-order", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(data)
-  });
+  let order;
+  try {
+    const res = await fetch("https://api.ariyava.in/create-order", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    order = await res.json();
+  } catch (err) {
+    alert("Could not connect to server. Please try again.");
+    btn.disabled = false;
+    btn.textContent = "Apply & Pay";
+    return;
+  }
 
-  const order = await res.json();
+  if (!order || !order.id) {
+    alert("Order creation failed. Please try again.");
+    btn.disabled = false;
+    btn.textContent = "Apply & Pay";
+    return;
+  }
 
   const options = {
-    key: "rzp_live_Sa7xfGd1Qv5fYK",
-    amount: order.amount,
-    currency: "INR",
-    order_id: order.id,
+  key: "process.env.RAZORPAY_KEY_ID", // ✅ test key
+  amount: order.amount,
+  currency: "INR",
+  order_id: order.id,
 
-    handler: async function (response) {
+  name: "Ariyava School",              // 🔥 REQUIRED
+  description: "Admission Fee Payment", // 🔥 REQUIRED
 
+  handler: async function (response) {
+    try {
       const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -298,14 +323,34 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
 
       const verifyData = await verifyRes.json();
 
-      // ✅ IMPORTANT FIX
-      if (verifyData.success) {
+      if (verifyData.success && verifyData.id) {
         window.location.href = "/success.html?id=" + verifyData.id;
       } else {
-        alert("Payment verification failed");
+        alert("Payment processed but data not saved. Contact school immediately.");
+        console.log("VERIFY RESPONSE:", verifyData);
+
+        btn.disabled = false;
+        btn.textContent = "Apply & Pay";
       }
+
+    } catch (err) {
+      alert("Verification error. Contact school with payment ID: " + response.razorpay_payment_id);
+      btn.disabled = false;
+      btn.textContent = "Apply & Pay";
     }
-  };
+  },
+
+  modal: {
+    ondismiss: function() {
+      btn.disabled = false;
+      btn.textContent = "Apply & Pay";
+    }
+  },
+
+  theme: {
+    color: "#5f2d8e"
+  }
+};
 
   new Razorpay(options).open();
 });

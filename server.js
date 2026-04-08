@@ -4,12 +4,10 @@ const bodyParser = require("body-parser");
 const crypto = require("crypto");
 const path = require("path");
 
-
-
 const app = express();
 const session = require("express-session");
-
 const cors = require("cors");
+
 app.use(cors());
 
 app.use(session({
@@ -23,7 +21,6 @@ app.use(express.static("public"));
 const Database = require("better-sqlite3");
 const db = new Database("database.db");
 
-// ✅ NEW TABLE (FULL DATA)
 db.exec(`
 CREATE TABLE IF NOT EXISTS students (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,50 +43,62 @@ CREATE TABLE IF NOT EXISTS students (
 )
 `);
 
-// ✅ Razorpay config
+// ✅ Razorpay config — LIVE KEYS
 const razorpay = new Razorpay({
-  key_id: "rzp_live_Sa7xfGd1Qv5fYK",
-  key_secret: "yK6Q3DSo9CPT6zWKH9vdBiJt"
+  key_id: "process.env.RAZORPAY_KEY_ID",
+  key_secret: "process.env.RAZORPAY_SECRET"
 });
 
-// ✅ Create Order
+// ✅ Create Order — FIX: added receipt field (Razorpay requires it, missing it caused 400 Bad Request)
 app.post("/create-order", async (req, res) => {
-  const order = await razorpay.orders.create({
-    amount: 60000,
-    currency: "INR"
-  });
-  res.json(order);
+  try {
+    const order = await razorpay.orders.create({
+      amount: 60000,
+      currency: "INR",
+      receipt: "receipt_" + Date.now()
+    });
+    res.json(order);
+  } catch (err) {
+    console.error("Order creation failed:", err);
+    res.status(500).json({ error: "Order creation failed" });
+  }
 });
 
-// ✅ Verify Payment + SAVE FULL DATA
+// ✅ Verify Payment + Save Data
 app.post("/verify-payment", (req, res) => {
+  console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
 
   const {
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
-
     name, dob, gender, aadhar, email,
     father, mother, mobile, address,
     class: cls, group, old_school, referal, teacher
-
   } = req.body;
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    console.log("Missing payment fields");
+    return res.status(400).json({ success: false });
+  }
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expected = crypto
-    .createHmac("sha256", "yK6Q3DSo9CPT6zWKH9vdBiJt")
+    .createHmac("sha256", "process.env.RAZORPAY_SECRET")
     .update(sign)
     .digest("hex");
 
-  if (expected === razorpay_signature) {
+  console.log("EXPECTED:", expected);
+  console.log("RECEIVED:", razorpay_signature);
 
+  if (expected === razorpay_signature) {
     try {
-      const stmt = db.prepare(
-        `INSERT INTO students 
+      const stmt = db.prepare(`
+        INSERT INTO students 
         (name, dob, gender, aadhar, email, father, mother, mobile, address, class, group_name, old_school, referal, teacher, payment_id, status)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
-      );
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      `);
 
       const result = stmt.run(
         name, dob, gender, aadhar, email,
@@ -98,20 +107,24 @@ app.post("/verify-payment", (req, res) => {
         razorpay_payment_id, "Paid"
       );
 
+      console.log("✅ SAVED ID:", result.lastInsertRowid);
+      console.log("ENV KEY:", process.env.RAZORPAY_KEY_ID);
+      console.log("SECRET EXISTS:", !!process.env.RAZORPAY_SECRET);
+
       res.json({ success: true, id: result.lastInsertRowid });
-      console.log("DATA SAVED:", name, razorpay_payment_id);
 
     } catch (err) {
-      console.log(err);
-      res.status(400).json({ success: false });
+      console.error("❌ DB ERROR:", err);
+      res.status(500).json({ success: false });
     }
 
   } else {
-    res.json({ success: false });
+    console.log("❌ SIGNATURE FAILED");
+    res.status(400).json({ success: false });
   }
 });
 
-// ADMIN PANEL (FULL DATA)
+// ✅ Admin Panel
 app.get("/admin", (req, res) => {
   if (!req.session.loggedIn) {
     return res.redirect("/login");
@@ -121,43 +134,21 @@ app.get("/admin", (req, res) => {
 
   let html = `
   <div style="display:flex; justify-content:space-between; align-items:center;">
-  <h2>Admin Panel - All Applications</h2>
-  <a href="/download-excel" 
-   style="background:#2e7d32;color:white;padding:8px 15px;border-radius:5px;text-decoration:none;">
-   Download Excel
-  </a>
-</div>
-
- <div style="overflow-x:auto; width:100%;">
-
-<table border="1" cellpadding="10"
-style="
-border-collapse:collapse;
-min-width:1600px;
-white-space:nowrap;
-font-size:14px;
-">
-  
-  <tr style="background:#5f2d8e; color:white;">
-    <th>Application ID</th>
-    <th>Name</th>
-    <th>DOB</th>
-    <th>Gender</th>
-    <th>Aadhar</th>
-    <th>Email</th>
-    <th>Father</th>
-    <th>Mother</th>
-    <th>Mobile</th>
-    <th>Address</th>
-    <th>Class</th>
-    <th>Group</th>
-    <th>Old School</th>
-    <th>Referral</th>
-    <th>Teacher</th>
-    <th>Status</th>
-    <th>Payment ID</th>
-    <th>Download</th>
-  </tr>
+    <h2>Admin Panel - All Applications</h2>
+    <a href="/download-excel"
+       style="background:#2e7d32;color:white;padding:8px 15px;border-radius:5px;text-decoration:none;">
+      Download Excel
+    </a>
+  </div>
+  <div style="overflow-x:auto; width:100%;">
+  <table border="1" cellpadding="10" style="border-collapse:collapse;min-width:1600px;white-space:nowrap;font-size:14px;">
+    <tr style="background:#5f2d8e; color:white;">
+      <th>Application ID</th>
+      <th>Name</th><th>DOB</th><th>Gender</th><th>Aadhar</th><th>Email</th>
+      <th>Father</th><th>Mother</th><th>Mobile</th><th>Address</th>
+      <th>Class</th><th>Group</th><th>Old School</th><th>Referral</th>
+      <th>Teacher</th><th>Status</th><th>Payment ID</th><th>Download</th>
+    </tr>
   `;
 
   rows.forEach(r => {
@@ -181,94 +172,56 @@ font-size:14px;
       <td style="white-space:nowrap;">${r.status || ''}</td>
       <td style="white-space:nowrap;">${r.payment_id || ''}</td>
       <td>
-<a href="/download-pdf/${r.id}" target="_blank"
-   style="background:#5f2d8e;color:white;padding:5px 10px; white-space:nowrap; border-radius:4px;text-decoration:none;">
-   PDF
-</a>
-</td>
+        <a href="/download-pdf/${r.id}" target="_blank"
+           style="background:#5f2d8e;color:white;padding:5px 10px;white-space:nowrap;border-radius:4px;text-decoration:none;">
+          PDF
+        </a>
+      </td>
     </tr>
     `;
   });
 
   html += "</table></div>";
-
   res.send(html);
 });
 
-// ✅ PDF DOWNLOAD (FIXED)
+// ✅ Admin PDF Download
 const PDFDocument = require("pdfkit");
 
 app.get("/download-pdf/:id", (req, res) => {
-
   const r = db.prepare("SELECT * FROM students WHERE id = ?").get(req.params.id);
-
   if (!r) return res.send("No Data");
 
   const doc = new PDFDocument({ margin: 40 });
-
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", "attachment; filename=student-details.pdf");
-
   doc.pipe(res);
 
-  // ✅ FONT (Tamil Support)
-  const path = require("path");
-doc.font(path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf"));
+  doc.font(path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf"));
 
-  // ================= HEADER =================
-  doc
-    .fillColor("#5f2d8e")
-    .fontSize(20)
-    .text("Ariyava Montessori Matric Hr Sec School", { align: "center" });
-
-  doc
-    .fontSize(14)
-    .fillColor("#000")
-    .text("Student Admission Details", { align: "center" });
-
+  doc.fillColor("#5f2d8e").fontSize(20)
+     .text("Ariyava Montessori Matric Hr Sec School", { align: "center" });
+  doc.fontSize(14).fillColor("#000")
+     .text("Student Admission Details", { align: "center" });
   doc.moveDown(1.5);
 
-  // ================= ID + STATUS BOX =================
   const academicYear = "2026-2027";
   const formattedId = `AVA#${String(r.id).padStart(4, '0')}-${academicYear}`;
-
   const boxY = doc.y;
 
-  doc
-    .rect(40, boxY, 520, 40)
-    .stroke("#5f2d8e");
-
-  doc
-    .fontSize(12)
-    .fillColor("#000")
-    .text(`Application ID: ${formattedId}`, 50, boxY + 12);
-
-  doc
-    .text(`Status: ${r.status}`, 350, boxY + 20);
-
+  doc.rect(40, boxY, 520, 40).stroke("#5f2d8e");
+  doc.fontSize(12).fillColor("#000").text(`Application ID: ${formattedId}`, 50, boxY + 12);
+  doc.text(`Status: ${r.status}`, 350, boxY + 20);
   doc.moveDown(3);
 
-  // ================= TABLE FUNCTION =================
   const drawRow = (label, value, y) => {
-    doc
-      .rect(40, y, 200, 25)
-      .stroke();
-
-    doc
-      .rect(240, y, 320, 25)
-      .stroke();
-
-    doc
-      .fontSize(11)
-      .text(label, 45, y + 7);
-
-    doc
-      .text(value || "-", 245, y + 7);
+    doc.rect(40, y, 200, 25).stroke();
+    doc.rect(240, y, 320, 25).stroke();
+    doc.fontSize(11).text(label, 45, y + 7);
+    doc.text(value || "-", 245, y + 7);
   };
 
   let y = doc.y;
-
-  // ================= STUDENT DETAILS =================
   const fields = [
     ["Student Name", r.name || "-"],
     ["Date of Birth", r.dob || "-"],
@@ -286,67 +239,53 @@ doc.font(path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf"));
     ["Referred Teacher", r.teacher || "-"],
     ["Payment ID", r.payment_id || "-"]
   ];
-
-  fields.forEach(f => {
-    if (Array.isArray(f)) {
-      drawRow(f[0], f[1], y);
-      y += 25;
-    }
-  });
+  fields.forEach(f => { drawRow(f[0], f[1], y); y += 25; });
 
   doc.moveDown(2);
-
-  // ================= FOOTER =================
-  doc
-    .fontSize(10)
-    .fillColor("#555")
-    .text("Generated by Ariyava School Admission System", { align: "center" });
-
+  doc.fontSize(10).fillColor("#555")
+     .text("Generated by Ariyava School Admission System", { align: "center" });
   doc.end();
 });
 
-
+// ✅ User Acknowledgement PDF — FIX: replaced all hardcoded D:/school site/ paths with path.join(__dirname,...)
 app.get("/download-user-pdf/:id", (req, res) => {
-
   const r = db.prepare("SELECT * FROM students WHERE id = ?").get(req.params.id);
-
   if (!r) return res.send("No Data");
 
-  const PDFDocument = require("pdfkit");
   const doc = new PDFDocument({ margin: 40 });
-
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", "attachment; filename=application.pdf");
-
   doc.pipe(res);
 
-  // WATERMARK IMAGE
-  doc.save();
+  // ✅ FIX: correct cross-platform paths
+  const logoPath = path.join(__dirname, "public", "images", "logo.jpeg");
+  const fontPath = path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf");
 
-  doc.opacity(0.5)
-     .image(path.join(__dirname, "public", "images", "logo.jpeg"),
-       doc.page.width / 2 - 175,
-       doc.page.height / 2 - 175,
-       { width: 350 }
-     );
-
-  doc.restore();
+  // WATERMARK — wrapped in try/catch so PDF still generates if image missing
+  try {
+    doc.save();
+    doc.opacity(0.15)
+       .image(logoPath,
+         doc.page.width / 2 - 175,
+         doc.page.height / 2 - 175,
+         { width: 350 }
+       );
+    doc.restore();
+  } catch (e) {
+    console.error("Watermark skipped:", e.message);
+  }
 
   // FONT
-  doc.font("/fonts/NotoSansTamil-Regular.ttf");
+  doc.font(fontPath);
 
   // HEADER
   doc.fontSize(20).fillColor("#5f2d8e")
      .text("Ariyava Montessori Matric Hr Sec School", { align: "center" });
-
   doc.moveDown();
-
   doc.fontSize(14).fillColor("#000")
      .text("ACKNOWLEDGEMENT RECEIPT", { align: "center" });
-
   doc.moveDown(2);
 
-  // ID
   const academicYear = "2026-2027";
   const formattedId = `AVA#${String(r.id).padStart(4, '0')}-${academicYear}`;
 
@@ -355,20 +294,16 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.text(`Application ID: ${formattedId}`);
   doc.text(`Payment ID: ${r.payment_id}`);
   doc.text(`Amount Paid : 600`);
-
   doc.moveDown();
 
-  // TABLE STYLE
   const drawRow = (label, value, y) => {
     doc.rect(40, y, 200, 25).stroke();
     doc.rect(240, y, 320, 25).stroke();
-
     doc.fontSize(11).text(label, 45, y + 7);
     doc.text(value || "-", 245, y + 7);
   };
 
   let y = doc.y;
-
   const fields = [
     ["Student Name", r.name],
     ["DOB", r.dob],
@@ -377,79 +312,48 @@ app.get("/download-user-pdf/:id", (req, res) => {
     ["Class", r.class],
     ["Mobile", r.mobile]
   ];
-
-  fields.forEach(f => {
-    drawRow(f[0], f[1], y);
-    y += 25;
-  });
+  fields.forEach(f => { drawRow(f[0], f[1], y); y += 25; });
 
   doc.moveDown(2);
   doc.x = 40;
 
-  // DATE
   const now = new Date();
   doc.fontSize(10).fillColor("#555")
      .text("Submitted on: " + now.toLocaleString());
-
   doc.moveDown();
 
   doc.fontSize(11).fillColor("#000")
      .text("Thank you for submitting your details to Ariyava School.", { align: "left" });
-
   doc.text("Your application is now being processed by our admissions team.", { align: "left" });
-
   doc.moveDown();
 
-  // WHAT'S NEXT
-  doc.fontSize(12).fillColor("#5f2d8e")
-     .text("What's next?", { align: "left" });
-
+  doc.fontSize(12).fillColor("#5f2d8e").text("What's next?", { align: "left" });
   doc.moveDown(0.5);
 
   doc.fontSize(11).fillColor("#000")
-     .text(
-       "One of our admissions officers will call you shortly at the phone number you provided to discuss your application and answer any questions.",
-       { align: "left" }
-     );
-
-  doc.text(
-    "Please ensure you are available to take the call.",
-    { align: "left" }
-  );
-
+     .text("One of our admissions officers will call you shortly at the phone number you provided to discuss your application and answer any questions.", { align: "left" });
+  doc.text("Please ensure you are available to take the call.", { align: "left" });
   doc.moveDown();
 
-  doc.text(
-    "Have questions right now? Feel free to contact our front office:",
-    { align: "left" }
-  );
-
-  doc.font('Helvetica-Bold');
-  doc.text(
-    "80562 41427, 95143 57140, 76959 95389, 93458 97359",
-    { align: "left" }
-  );
-
+  doc.text("Have questions right now? Feel free to contact our front office:", { align: "left" });
+  doc.font("Helvetica-Bold")
+     .text("80562 41427, 95143 57140, 76959 95389, 93458 97359", { align: "left" });
   doc.moveDown();
-  doc.font('Helvetica');
+  doc.font("Helvetica");
   doc.text("We look forward to speaking with you soon!", { align: "left" });
-
   doc.moveDown();
-
   doc.text("Best regards,", { align: "left" });
   doc.text("The Ariyava Admissions Team", { align: "left" });
   doc.text("Note: This is a computer-generated acknowledgment and does not guarantee final admission.", { align: "left" });
   doc.end();
 });
 
-// ✅ EXCEL DOWNLOAD
+// ✅ Excel Download
 const ExcelJS = require("exceljs");
 
 app.get("/download-excel", async (req, res) => {
-
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Students");
-
   const rows = db.prepare("SELECT * FROM students").all();
 
   if (!rows || rows.length === 0) return res.send("No Data");
@@ -459,97 +363,35 @@ app.get("/download-excel", async (req, res) => {
     key: key,
     width: 20
   }));
-
   rows.forEach(row => sheet.addRow(row));
 
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  );
-  res.setHeader(
-    "Content-Disposition",
-    "attachment; filename=students.xlsx"
-  );
-
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  res.setHeader("Content-Disposition", "attachment; filename=students.xlsx");
   await workbook.xlsx.write(res);
   res.end();
 });
 
-// LOGIN PAGE
+// ✅ Login Page
 app.get("/login", (req, res) => {
-
   const error = req.query.error;
-
   res.send(`
   <html>
   <head>
     <title>Admin Login</title>
     <style>
-      body {
-        margin:0;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background: linear-gradient(135deg, #5f2d8e, #f0e8ff);
-        font-family: Arial;
-      }
-
-      .login-box {
-        background:white;
-        padding:30px;
-        border-radius:10px;
-        width:300px;
-        box-shadow:0 10px 25px rgba(0,0,0,0.2);
-        text-align:center;
-      }
-
-      .login-box h2 {
-        margin-bottom:20px;
-        color:#5f2d8e;
-      }
-
-      .login-box input {
-        width:100%;
-        padding:10px;
-        margin:10px 0;
-        border:1px solid #ccc;
-        border-radius:5px;
-        font-size:14px;
-      }
-
-      .login-box button {
-        width:100%;
-        padding:10px;
-        background:#5f2d8e;
-        color:white;
-        border:none;
-        border-radius:5px;
-        font-size:15px;
-        cursor:pointer;
-      }
-
-      .login-box button:hover {
-        background:#4a2270;
-      }
-
-      .error {
-        background:#ffe0e0;
-        color:#b00020;
-        padding:8px;
-        border-radius:5px;
-        margin-bottom:10px;
-        font-size:14px;
-      }
+      body { margin:0; height:100vh; display:flex; justify-content:center; align-items:center; background:linear-gradient(135deg,#5f2d8e,#f0e8ff); font-family:Arial; }
+      .login-box { background:white; padding:30px; border-radius:10px; width:300px; box-shadow:0 10px 25px rgba(0,0,0,0.2); text-align:center; }
+      .login-box h2 { margin-bottom:20px; color:#5f2d8e; }
+      .login-box input { width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:5px; font-size:14px; }
+      .login-box button { width:100%; padding:10px; background:#5f2d8e; color:white; border:none; border-radius:5px; font-size:15px; cursor:pointer; }
+      .login-box button:hover { background:#4a2270; }
+      .error { background:#ffe0e0; color:#b00020; padding:8px; border-radius:5px; margin-bottom:10px; font-size:14px; }
     </style>
   </head>
-
   <body>
     <div class="login-box">
       <h2>Admin Login</h2>
-
       ${error ? `<div class="error">Invalid Username or Password</div>` : ""}
-
       <form method="POST" action="/login">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
@@ -561,10 +403,9 @@ app.get("/login", (req, res) => {
   `);
 });
 
-// LOGIN CHECK
+// ✅ Login Check
 app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
   const { username, password } = req.body;
-
   if (username === "ariyavaschool2026" && password === "ariyavamajestic2026") {
     req.session.loggedIn = true;
     res.redirect("/admin");
