@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS students (
 
 // ✅ Razorpay — reads from Render environment variables
 const razorpay = new Razorpay({
-  key_id: "rzp_live_SavhtEi0xxBn5O",
-  key_secret: "nzQ5lqq9Fh07Uploe5n4Uo4o"
+  key_id: "rzp_live_Sb0Vp5t9KWloOG",
+  key_secret: "I3ITKQDNUSNsJBCJRDnSwYbn"
 });
 
 // ✅ Create Order — 600 rupees = 60000 paise
@@ -82,7 +82,7 @@ app.post("/verify-payment", (req, res) => {
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expected = crypto
-    .createHmac("sha256", "nzQ5lqq9Fh07Uploe5n4Uo4o")
+    .createHmac("sha256", "I3ITKQDNUSNsJBCJRDnSwYbn")
     .update(sign)
     .digest("hex");
 
