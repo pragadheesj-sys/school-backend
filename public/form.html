@@ -287,20 +287,24 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
 
     handler: async function (response) {
 
-  const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      ...response,
-      ...data
-    })
-  });
+      const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          ...response,
+          ...data
+        })
+      });
 
-  const verifyData = await verifyRes.json();
+      const verifyData = await verifyRes.json();
 
-  // ✅ use DB id (NOT order.id)
-  window.location.href = "/success.html?id=" + verifyData.id;
-}
+      // ✅ IMPORTANT FIX
+      if (verifyData.success) {
+        window.location.href = "/success.html?id=" + verifyData.id;
+      } else {
+        alert("Payment verification failed");
+      }
+    }
   };
 
   new Razorpay(options).open();

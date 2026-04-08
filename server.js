@@ -2,6 +2,7 @@ const express = require("express");
 const Razorpay = require("razorpay");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
+const path = require("path");
 
 
 
@@ -98,10 +99,11 @@ app.post("/verify-payment", (req, res) => {
       );
 
       res.json({ success: true, id: result.lastInsertRowid });
+      console.log("DATA SAVED:", name, razorpay_payment_id);
 
     } catch (err) {
       console.log(err);
-      res.json({ success: false });
+      res.status(400).json({ success: false });
     }
 
   } else {
@@ -210,7 +212,8 @@ app.get("/download-pdf/:id", (req, res) => {
   doc.pipe(res);
 
   // ✅ FONT (Tamil Support)
-  doc.font("/fonts/NotoSansTamil-Regular.ttf");
+  const path = require("path");
+doc.font(path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf"));
 
   // ================= HEADER =================
   doc
@@ -321,7 +324,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.save();
 
   doc.opacity(0.5)
-     .image("/images/logo.jpeg", 
+     .image(path.join(__dirname, "public", "images", "logo.jpeg"),
        doc.page.width / 2 - 175,
        doc.page.height / 2 - 175,
        { width: 350 }
