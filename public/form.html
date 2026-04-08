@@ -311,6 +311,7 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
   description: "Admission Fee Payment", // 🔥 REQUIRED
 
   handler: async function (response) {
+    console.log("PAYMENT RESPONSE:", response); 
     try {
       const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
         method: "POST",
