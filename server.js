@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS students (
 
 // ✅ Razorpay — reads from Render environment variables
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_SECRET
+  key_id: "rzp_live_SavhtEi0xxBn5O",
+  key_secret: "nzQ5lqq9Fh07Uploe5n4Uo4o"
 });
 
 // ✅ Create Order — 600 rupees = 60000 paise
@@ -82,7 +82,7 @@ app.post("/verify-payment", (req, res) => {
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expected = crypto
-    .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    .createHmac("sha256", "nzQ5lqq9Fh07Uploe5n4Uo4o")
     .update(sign)
     .digest("hex");
 
@@ -399,6 +399,5 @@ app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
-  console.log("Razorpay Key ID loaded:", process.env.RAZORPAY_KEY_ID ? "YES" : "NO — CHECK ENV VARS");
-  console.log("Razorpay Secret loaded:", process.env.RAZORPAY_SECRET ? "YES" : "NO — CHECK ENV VARS");
+  
 });
