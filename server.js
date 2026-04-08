@@ -65,9 +65,9 @@ app.post("/create-order", async (req, res) => {
 });
 
 // ✅ Verify Payment + Save Data
-console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
+
 app.post("/verify-payment", (req, res) => {
-  
+console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
   const {
     razorpay_order_id,
     razorpay_payment_id,
