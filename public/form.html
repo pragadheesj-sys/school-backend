@@ -314,41 +314,30 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
 
   console.log("PAYMENT RESPONSE:", response);
 
-  // 🚨 STOP if fields missing
-  if (!response.razorpay_order_id || 
-      !response.razorpay_payment_id || 
-      !response.razorpay_signature) {
+  // 🚨 FORCE SEND ONLY REQUIRED FIELDS
+  const payload = {
+    razorpay_order_id: response.razorpay_order_id,
+    razorpay_payment_id: response.razorpay_payment_id,
+    razorpay_signature: response.razorpay_signature,
+    ...data
+  };
 
-    alert("Payment response incomplete");
-    console.log("INVALID RESPONSE:", response);
-    return;
-  }
+  console.log("SENDING TO BACKEND:", payload);
 
-  try {
-    const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        razorpay_order_id: response.razorpay_order_id,
-        razorpay_payment_id: response.razorpay_payment_id,
-        razorpay_signature: response.razorpay_signature,
-        ...data
-      })
-    });
+  const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(payload)
+  });
 
-    const verifyData = await verifyRes.json();
+  const verifyData = await verifyRes.json();
 
-    console.log("VERIFY RESPONSE:", verifyData);
+  console.log("VERIFY RESPONSE:", verifyData);
 
-    if (verifyData.success) {
-      window.location.href = "/success.html?id=" + verifyData.id;
-    } else {
-      alert("Payment verification failed");
-    }
-
-  } catch (err) {
-    console.error("VERIFY ERROR:", err);
-    alert("Server error during verification");
+  if (verifyData.success) {
+    window.location.href = "/success.html?id=" + verifyData.id;
+  } else {
+    alert("Payment verification failed");
   }
 },
 
