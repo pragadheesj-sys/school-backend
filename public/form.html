@@ -311,35 +311,46 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
   description: "Admission Fee Payment", // 🔥 REQUIRED
 
   handler: async function (response) {
-    console.log("PAYMENT RESPONSE:", response); 
-    try {
-      const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          ...response,
-          ...data
-        })
-      });
 
-      const verifyData = await verifyRes.json();
+  console.log("PAYMENT RESPONSE:", response);
 
-      if (verifyData.success && verifyData.id) {
-        window.location.href = "/success.html?id=" + verifyData.id;
-      } else {
-        alert("Payment processed but data not saved. Contact school immediately.");
-        console.log("VERIFY RESPONSE:", verifyData);
+  // 🚨 STOP if fields missing
+  if (!response.razorpay_order_id || 
+      !response.razorpay_payment_id || 
+      !response.razorpay_signature) {
 
-        btn.disabled = false;
-        btn.textContent = "Apply & Pay";
-      }
+    alert("Payment response incomplete");
+    console.log("INVALID RESPONSE:", response);
+    return;
+  }
 
-    } catch (err) {
-      alert("Verification error. Contact school with payment ID: " + response.razorpay_payment_id);
-      btn.disabled = false;
-      btn.textContent = "Apply & Pay";
+  try {
+    const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        ...data
+      })
+    });
+
+    const verifyData = await verifyRes.json();
+
+    console.log("VERIFY RESPONSE:", verifyData);
+
+    if (verifyData.success) {
+      window.location.href = "/success.html?id=" + verifyData.id;
+    } else {
+      alert("Payment verification failed");
     }
-  },
+
+  } catch (err) {
+    console.error("VERIFY ERROR:", err);
+    alert("Server error during verification");
+  }
+},
 
   modal: {
     ondismiss: function() {

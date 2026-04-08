@@ -65,9 +65,9 @@ app.post("/create-order", async (req, res) => {
 });
 
 // ✅ Verify Payment + Save Data
+console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
 app.post("/verify-payment", (req, res) => {
-  console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
-
+  
   const {
     razorpay_order_id,
     razorpay_payment_id,
@@ -79,7 +79,7 @@ app.post("/verify-payment", (req, res) => {
 
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
     console.log("Missing payment fields");
-    return res.status(400).json({ success: false });
+    return res.status(400).json({ success: false, error: "Missing fields" });
   }
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
