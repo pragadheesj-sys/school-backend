@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS students (
 )
 `);
 
-// ✅ Razorpay config — LIVE KEYS
+// ✅ Razorpay — reads from Render environment variables
 const razorpay = new Razorpay({
-  key_id: "process.env.RAZORPAY_KEY_ID",
-  key_secret: "process.env.RAZORPAY_SECRET"
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET
 });
 
-// ✅ Create Order — FIX: added receipt field (Razorpay requires it, missing it caused 400 Bad Request)
+// ✅ Create Order — 600 rupees = 60000 paise
 app.post("/create-order", async (req, res) => {
   try {
     const order = await razorpay.orders.create({
@@ -57,6 +57,7 @@ app.post("/create-order", async (req, res) => {
       currency: "INR",
       receipt: "receipt_" + Date.now()
     });
+    console.log("Order created:", order.id, "amount:", order.amount);
     res.json(order);
   } catch (err) {
     console.error("Order creation failed:", err);
@@ -64,10 +65,9 @@ app.post("/create-order", async (req, res) => {
   }
 });
 
-// ✅ Verify Payment + Save Data
-
+// ✅ Verify Payment — uses env secret for signature check
 app.post("/verify-payment", (req, res) => {
-console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
+
   const {
     razorpay_order_id,
     razorpay_payment_id,
@@ -77,28 +77,25 @@ console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
     class: cls, group, old_school, referal, teacher
   } = req.body;
 
-  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-    console.log("Missing payment fields");
-    return res.status(400).json({ success: false, error: "Missing fields" });
-  }
+  console.log("Verifying payment:", razorpay_order_id, razorpay_payment_id);
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expected = crypto
-    .createHmac("sha256", "process.env.RAZORPAY_SECRET")
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
     .update(sign)
     .digest("hex");
 
-  console.log("EXPECTED:", expected);
-  console.log("RECEIVED:", razorpay_signature);
+  console.log("Expected sig:", expected);
+  console.log("Received sig:", razorpay_signature);
 
   if (expected === razorpay_signature) {
     try {
-      const stmt = db.prepare(`
-        INSERT INTO students 
+      const stmt = db.prepare(
+        `INSERT INTO students 
         (name, dob, gender, aadhar, email, father, mother, mobile, address, class, group_name, old_school, referal, teacher, payment_id, status)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-      `);
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+      );
 
       const result = stmt.run(
         name, dob, gender, aadhar, email,
@@ -107,20 +104,17 @@ console.log("VERIFY BODY:", req.body); // 👈 ADD THIS
         razorpay_payment_id, "Paid"
       );
 
-      console.log("✅ SAVED ID:", result.lastInsertRowid);
-      console.log("ENV KEY:", process.env.RAZORPAY_KEY_ID);
-      console.log("SECRET EXISTS:", !!process.env.RAZORPAY_SECRET);
-
+      console.log("DATA SAVED:", name, razorpay_payment_id, "row id:", result.lastInsertRowid);
       res.json({ success: true, id: result.lastInsertRowid });
 
     } catch (err) {
-      console.error("❌ DB ERROR:", err);
-      res.status(500).json({ success: false });
+      console.error("DB insert failed:", err);
+      res.status(500).json({ success: false, error: "DB error" });
     }
 
   } else {
-    console.log("❌ SIGNATURE FAILED");
-    res.status(400).json({ success: false });
+    console.error("Signature MISMATCH — payment not verified");
+    res.status(400).json({ success: false, error: "Signature mismatch" });
   }
 });
 
@@ -185,7 +179,7 @@ app.get("/admin", (req, res) => {
   res.send(html);
 });
 
-// ✅ Admin PDF Download
+// ✅ Admin PDF
 const PDFDocument = require("pdfkit");
 
 app.get("/download-pdf/:id", (req, res) => {
@@ -205,8 +199,7 @@ app.get("/download-pdf/:id", (req, res) => {
      .text("Student Admission Details", { align: "center" });
   doc.moveDown(1.5);
 
-  const academicYear = "2026-2027";
-  const formattedId = `AVA#${String(r.id).padStart(4, '0')}-${academicYear}`;
+  const formattedId = `AVA#${String(r.id).padStart(4, '0')}-2026-2027`;
   const boxY = doc.y;
 
   doc.rect(40, boxY, 520, 40).stroke("#5f2d8e");
@@ -247,7 +240,7 @@ app.get("/download-pdf/:id", (req, res) => {
   doc.end();
 });
 
-// ✅ User Acknowledgement PDF — FIX: replaced all hardcoded D:/school site/ paths with path.join(__dirname,...)
+// ✅ User Acknowledgement PDF
 app.get("/download-user-pdf/:id", (req, res) => {
   const r = db.prepare("SELECT * FROM students WHERE id = ?").get(req.params.id);
   if (!r) return res.send("No Data");
@@ -257,37 +250,27 @@ app.get("/download-user-pdf/:id", (req, res) => {
   res.setHeader("Content-Disposition", "attachment; filename=application.pdf");
   doc.pipe(res);
 
-  // ✅ FIX: correct cross-platform paths
   const logoPath = path.join(__dirname, "public", "images", "logo.jpeg");
   const fontPath = path.join(__dirname, "fonts", "NotoSansTamil-Regular.ttf");
 
-  // WATERMARK — wrapped in try/catch so PDF still generates if image missing
   try {
     doc.save();
     doc.opacity(0.15)
-       .image(logoPath,
-         doc.page.width / 2 - 175,
-         doc.page.height / 2 - 175,
-         { width: 350 }
-       );
+       .image(logoPath, doc.page.width / 2 - 175, doc.page.height / 2 - 175, { width: 350 });
     doc.restore();
   } catch (e) {
     console.error("Watermark skipped:", e.message);
   }
 
-  // FONT
   doc.font(fontPath);
 
-  // HEADER
   doc.fontSize(20).fillColor("#5f2d8e")
      .text("Ariyava Montessori Matric Hr Sec School", { align: "center" });
   doc.moveDown();
-  doc.fontSize(14).fillColor("#000")
-     .text("ACKNOWLEDGEMENT RECEIPT", { align: "center" });
+  doc.fontSize(14).fillColor("#000").text("ACKNOWLEDGEMENT RECEIPT", { align: "center" });
   doc.moveDown(2);
 
-  const academicYear = "2026-2027";
-  const formattedId = `AVA#${String(r.id).padStart(4, '0')}-${academicYear}`;
+  const formattedId = `AVA#${String(r.id).padStart(4, '0')}-2026-2027`;
 
   doc.fontSize(12);
   doc.text(`Warm greetings of the year!!!!!`);
@@ -318,8 +301,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.x = 40;
 
   const now = new Date();
-  doc.fontSize(10).fillColor("#555")
-     .text("Submitted on: " + now.toLocaleString());
+  doc.fontSize(10).fillColor("#555").text("Submitted on: " + now.toLocaleString());
   doc.moveDown();
 
   doc.fontSize(11).fillColor("#000")
@@ -415,4 +397,8 @@ app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running on", PORT));
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+  console.log("Razorpay Key ID loaded:", process.env.RAZORPAY_KEY_ID ? "YES" : "NO — CHECK ENV VARS");
+  console.log("Razorpay Secret loaded:", process.env.RAZORPAY_SECRET ? "YES" : "NO — CHECK ENV VARS");
+});

@@ -4,157 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admission Form</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-
-/* RESET */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Noto Sans Tamil', sans-serif;
-}
-
-/* PAGE BACKGROUND */
-body{
-  background:#f0e8ff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-}
-
-/* FORM CARD */
-.form-container{
-  width:100%;
-  max-width:600px;
-  background:#fff;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-
-/* TITLE */
-.form-container h2{
-  text-align:center;
-  margin-bottom:20px;
-  color:#5f2d8e;
-}
-
-/* EACH FIELD */
-.fgroup{
-  margin-bottom:15px;
-  display:flex;
-  flex-direction:column;
-}
-
-/* LABEL */
-.fgroup label{
-  margin-bottom:5px;
-  font-weight:600;
-  color:#562987;
-  line-height: 2;
-}
-
-/* INPUTS (exclude radio) */
-.fgroup input:not([type="radio"]),
-.fgroup select,
-.fgroup textarea{
-  width:100%;
-  height:50px;
-  padding:5px;
-  font-size:16px;
-  margin-top:5px;
-  border:1px solid #ddd;
-  border-radius:6px;
-  outline:none;
-  transition:0.3s;
-}
-
-/* RADIO BUTTON SIZE */
-input[type="radio"]{
-  width:16px;
-  height:16px;
-  accent-color:#5f2d8e;
-}
-
-/* FOCUS EFFECT */
-.fgroup input:focus,
-.fgroup select:focus,
-.fgroup textarea:focus{
-  border-color:#5f2d8e;
-}
-
-.radio-group{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:10px;
-  margin-top:5px;
-}
-
-.radio-group label{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  width:100%;
-  cursor:pointer;
-}
-
-/* BUTTON */
-#submitBtn{
-  width:100%;
-  padding:12px;
-  background:#5f2d8e;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-#submitBtn:hover:not(:disabled){
-  background:#562987;
-}
-
-/* ✅ FIX: disabled state so user cannot click again */
-#submitBtn:disabled{
-  background:#aaa;
-  cursor:not-allowed;
-  opacity:0.7;
-}
-
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Noto Sans Tamil',sans-serif; }
+body{ background:#f0e8ff; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.form-container{ width:100%; max-width:600px; background:#fff; margin-top:40px; margin-bottom:40px; padding:30px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+.form-container h2{ text-align:center; margin-bottom:20px; color:#5f2d8e; }
+.fgroup{ margin-bottom:15px; display:flex; flex-direction:column; }
+.fgroup label{ margin-bottom:5px; font-weight:600; color:#562987; line-height:2; }
+.fgroup input:not([type="radio"]), .fgroup select, .fgroup textarea{ width:100%; height:50px; padding:5px; font-size:16px; margin-top:5px; border:1px solid #ddd; border-radius:6px; outline:none; transition:0.3s; }
+input[type="radio"]{ width:16px; height:16px; accent-color:#5f2d8e; }
+.fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus{ border-color:#5f2d8e; }
+.radio-group{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; margin-top:5px; }
+.radio-group label{ display:flex; align-items:center; gap:8px; width:100%; cursor:pointer; }
+#submitBtn{ width:100%; padding:12px; background:#5f2d8e; color:#fff; border:none; border-radius:6px; font-size:16px; font-weight:bold; cursor:pointer; transition:0.3s; }
+#submitBtn:hover:not(:disabled){ background:#562987; }
+#submitBtn:disabled{ background:#aaa; cursor:not-allowed; opacity:0.7; }
 </style>
 </head>
-
 <body>
-
 <div class="form-container">
 <h2>Admission Form</h2>
-
 <form id="admissionForm">
 
 <div class="fgroup">
-<label>Student's Full Name (As per Birth Certificate/Aadhaar) <br>
- மாணவரின் முழுப் பெயர் (பிறப்புச் சான்றிதழ்/ஆதார் படி)
-</label>
+<label>Student's Full Name (As per Birth Certificate/Aadhaar) <br> மாணவரின் முழுப் பெயர் (பிறப்புச் சான்றிதழ்/ஆதார் படி)</label>
 <input type="text" name="name" required>
 </div>
 
 <div class="fgroup">
-<label>Date of Birth  /   பிறந்த தேதி</label>
+<label>Date of Birth / பிறந்த தேதி</label>
 <input type="date" name="dob" required>
 </div>
 
 <div class="fgroup">
-<label>Gender  / பாலினம்</label>
+<label>Gender / பாலினம்</label>
 <div class="radio-group">
 <label><input type="radio" name="gender" value="male"> Male</label>
 <label><input type="radio" name="gender" value="female"> Female</label>
@@ -165,28 +50,26 @@ input[type="radio"]{
 <label>Which class is the student seeking admission to? <br> மாணவர் எந்த வகுப்பில் சேர விரும்புகிறார்?</label>
 <select name="class" required>
 <option value="">Select Class</option>
-<option>PRE K.G /  ப்ரீ கேஜி</option>
-<option>LKG    /  எல். கேஜி</option>
-<option>UKG   / யு.கேஜி</option>
-<option>Class 1      / வகுப்பு   1</option>
-<option>Class 2     / வகுப்பு   2</option>
-<option>Class 3     /  வகுப்பு   3</option>
-<option>Class 4     / வகுப்பு  4</option>
-<option>Class 5    /  வகுப்பு   5</option>
-<option>Class 6    / வகுப்பு    6</option>
-<option>Class 7    / வகுப்பு  7</option>
-<option>Class 8   / வகுப்பு  8</option>
-<option>Class 9    /  வகுப்பு   9</option>
-<option>Class 10    /  வகுப்பு  10</option>
-<option>Class 11  /  வகுப்பு   11</option>
-<option>Class 12   / வகுப்பு    12</option>
+<option>PRE K.G / ப்ரீ கேஜி</option>
+<option>LKG / எல். கேஜி</option>
+<option>UKG / யு.கேஜி</option>
+<option>Class 1 / வகுப்பு 1</option>
+<option>Class 2 / வகுப்பு 2</option>
+<option>Class 3 / வகுப்பு 3</option>
+<option>Class 4 / வகுப்பு 4</option>
+<option>Class 5 / வகுப்பு 5</option>
+<option>Class 6 / வகுப்பு 6</option>
+<option>Class 7 / வகுப்பு 7</option>
+<option>Class 8 / வகுப்பு 8</option>
+<option>Class 9 / வகுப்பு 9</option>
+<option>Class 10 / வகுப்பு 10</option>
+<option>Class 11 / வகுப்பு 11</option>
+<option>Class 12 / வகுப்பு 12</option>
 </select>
 </div>
 
 <div class="fgroup">
-<label>Please enter the 12-digit Aadhar number of the child. <br>
- (குழந்தையின் 12 இலக்க ஆதார் எண்ணை உள்ளிடவும்.)
-</label>
+<label>Please enter the 12-digit Aadhar number of the child. <br> (குழந்தையின் 12 இலக்க ஆதார் எண்ணை உள்ளிடவும்.)</label>
 <input type="number" name="aadhar" required>
 </div>
 
@@ -196,166 +79,148 @@ input[type="radio"]{
 </div>
 
 <div class="fgroup">
-<label>Father's Full Name  /  தந்தையின் முழுப் பெயர்</label>
+<label>Father's Full Name / தந்தையின் முழுப் பெயர்</label>
 <input type="text" name="father" required>
 </div>
 
 <div class="fgroup">
-<label>Mother's Full Name  /   தாயின் முழுப் பெயர்
-</label>
+<label>Mother's Full Name / தாயின் முழுப் பெயர்</label>
 <input type="text" name="mother" required>
 </div>
 
 <div class="fgroup">
-<label>Parent/Guardian Phone  Number  <br>  பெற்றோர்/பாதுகாவலர் தொடர்பு எண்
-</label>
+<label>Parent/Guardian Phone Number <br> பெற்றோர்/பாதுகாவலர் தொடர்பு எண்</label>
 <input type="tel" name="mobile" required>
 </div>
 
 <div class="fgroup">
-<label>Residential Address /    குடியிருப்பு முகவரி</label>
+<label>Residential Address / குடியிருப்பு முகவரி</label>
 <input type="text" name="address" required>
 </div>
 
 <div class="fgroup">
-<label>In case of Class 11 admission, please select the preferred stream: <br>
- 11 ஆம் வகுப்பு சேர்க்கைக்கு, தயவுசெய்து விருப்பமான பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்: </label>
+<label>In case of Class 11 admission, please select the preferred stream: <br> 11 ஆம் வகுப்பு சேர்க்கைக்கு, தயவுசெய்து விருப்பமான பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்:</label>
 <div class="radio-group">
-<label><input type="radio" name="group" value="Biomaths"> BIO MATHS(MATHS , PHYSICS , CHEMISTRY  & BIOLOGY)</label>
-<label><input type="radio" name="group" value="computer science"> COMPUTER SCIENCE / Maths (MATHS , PHYSICS, CHEMISTRY & COMPUTER SCIENCE)</label>
-<label><input type="radio" name="group" value="Pure science"> PURE SCIENCE (PHYSICS , CHEMISTRY , BOTANY & ZOOLOGY)</label>
-<label><input type="radio" name="group" value="Arts"> ARTS (ECONOMICS , COMMERCE , ACCOUNTANCY , COMPUTER APPLICATIONS)</label>
+<label><input type="radio" name="group" value="Biomaths"> BIO MATHS (MATHS, PHYSICS, CHEMISTRY & BIOLOGY)</label>
+<label><input type="radio" name="group" value="computer science"> COMPUTER SCIENCE / Maths (MATHS, PHYSICS, CHEMISTRY & COMPUTER SCIENCE)</label>
+<label><input type="radio" name="group" value="Pure science"> PURE SCIENCE (PHYSICS, CHEMISTRY, BOTANY & ZOOLOGY)</label>
+<label><input type="radio" name="group" value="Arts"> ARTS (ECONOMICS, COMMERCE, ACCOUNTANCY, COMPUTER APPLICATIONS)</label>
 </div>
 </div>
 
 <div class="fgroup">
-<label>Name of Previous School Attended (If applicable, for Class 1 onwards) <br> 
-(முன்பு படித்த பள்ளியின் பெயர் 1 ஆம் வகுப்பு முதல்)
-</label>
+<label>Name of Previous School Attended (If applicable, for Class 1 onwards) <br> (முன்பு படித்த பள்ளியின் பெயர் 1 ஆம் வகுப்பு முதல்)</label>
 <input type="text" name="old_school">
 </div>
 
 <div class="fgroup">
-<label>How did you hear about our school? <br>  
-எங்கள் பள்ளியைப் பற்றி எப்படிக் கேள்விப்பட்டீர்கள்?
-</label>
+<label>How did you hear about our school? <br> எங்கள் பள்ளியைப் பற்றி எப்படிக் கேள்விப்பட்டீர்கள்?</label>
 <select name="referal">
 <option value="">Choose</option>
-<option value="Recommendation from Ariyava Teachers ">Recommendation from Ariyava Teachers  / அரியவா ஆசிரியர்களின் பரிந்துரை</option>
+<option value="Recommendation from Ariyava Teachers">Recommendation from Ariyava Teachers / அரியவா ஆசிரியர்களின் பரிந்துரை</option>
 <option value="By Advertisement (Brochure)">By Advertisement (Brochure) / விளம்பரம் மூலம்</option>
-<option value="School Website/Social Media">School Website/Social Media  /  பள்ளி வலைத்தளம்/சமூக ஊடகங்கள்</option>
-<option value="Recommendation from Friends/Family ">Recommendation from Friends/Family  / நண்பர்கள்/குடும்பத்தினரிடமிருந்து பரிந்துரை</option>
-<option value="Current Student/Parent">Current Student/Parent  / தற்போதைய மாணவர்/பெற்றோர்</option>
-<option value="Walk-in/Near Locality">Walk-in/Near Locality  / நேரில் வந்து/அருகில் உள்ள பகுதி</option>
+<option value="School Website/Social Media">School Website/Social Media / பள்ளி வலைத்தளம்/சமூக ஊடகங்கள்</option>
+<option value="Recommendation from Friends/Family">Recommendation from Friends/Family / நண்பர்கள்/குடும்பத்தினரிடமிருந்து பரிந்துரை</option>
+<option value="Current Student/Parent">Current Student/Parent / தற்போதைய மாணவர்/பெற்றோர்</option>
+<option value="Walk-in/Near Locality">Walk-in/Near Locality / நேரில் வந்து/அருகில் உள்ள பகுதி</option>
 <option value="Other">Other</option>
 </select>
 </div>
 
 <div class="fgroup">
-<label>Were you are referred to us by someone  referred by a Ariyava teacher or Staff please mention their name. <br>
-அரியவா ஆசிரியர் அல்லது ஊழியர்களால் யாராவது உங்களை எங்களுக்கு பரிந்துரைத்தால், தயவுசெய்து அவர்களின் பெயரைக் குறிப்பிடவும்.</label>
+<label>If referred by an Ariyava teacher or staff, please mention their name. <br> அரியவா ஆசிரியர் அல்லது ஊழியர்களால் பரிந்துரைக்கப்பட்டால், அவர்களின் பெயரைக் குறிப்பிடவும்.</label>
 <input type="text" name="teacher">
 </div>
 
-<!-- ✅ FIX: button with id so JS can disable it -->
-<button type="submit" id="submitBtn">Apply & Pay</button>
-
+<button type="submit" id="submitBtn">Apply & Pay ₹600</button>
 </form>
 </div>
 
-<!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
 <script>
 document.getElementById("admissionForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const btn = document.getElementById("submitBtn");
-
-  // ✅ FIX: disable button immediately to prevent multiple clicks
   btn.disabled = true;
   btn.textContent = "Please wait...";
 
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
+  // ✅ Step 1: Create order
   let order;
   try {
     const res = await fetch("https://api.ariyava.in/create-order", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data)
+      body: JSON.stringify({})
     });
     order = await res.json();
   } catch (err) {
     alert("Could not connect to server. Please try again.");
     btn.disabled = false;
-    btn.textContent = "Apply & Pay";
+    btn.textContent = "Apply & Pay ₹600";
     return;
   }
 
   if (!order || !order.id) {
     alert("Order creation failed. Please try again.");
     btn.disabled = false;
-    btn.textContent = "Apply & Pay";
+    btn.textContent = "Apply & Pay ₹600";
     return;
   }
 
+  // ✅ Step 2: Open Razorpay with key from server order response
   const options = {
-  key: "process.env.RAZORPAY_KEY_ID", // ✅ test key
-  amount: order.amount,
-  currency: "INR",
-  order_id: order.id,
+    key: "rzp_live_SavhtEi0xxBn5O",
+    amount: order.amount,
+    currency: order.currency,
+    order_id: order.id,
+    name: "Ariyava School",
+    description: "Admission Application Fee",
 
-  name: "Ariyava School",              // 🔥 REQUIRED
-  description: "Admission Fee Payment", // 🔥 REQUIRED
+    handler: async function (response) {
+      try {
+        // ✅ Step 3: Verify and save
+        const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            ...data
+          })
+        });
 
-  handler: async function (response) {
+        const verifyData = await verifyRes.json();
 
-  console.log("PAYMENT RESPONSE:", response);
+        if (verifyData.success) {
+          window.location.href = "/success.html?id=" + verifyData.id;
+        } else {
+          alert("Payment verification failed. Please contact the school with Payment ID: " + response.razorpay_payment_id);
+          btn.disabled = false;
+          btn.textContent = "Apply & Pay ₹600";
+        }
+      } catch (err) {
+        alert("Error saving data. Contact school with Payment ID: " + response.razorpay_payment_id);
+        btn.disabled = false;
+        btn.textContent = "Apply & Pay ₹600";
+      }
+    },
 
-  // 🚨 FORCE SEND ONLY REQUIRED FIELDS
-  const payload = {
-    razorpay_order_id: response.razorpay_order_id,
-    razorpay_payment_id: response.razorpay_payment_id,
-    razorpay_signature: response.razorpay_signature,
-    ...data
-  };
-
-  console.log("SENDING TO BACKEND:", payload);
-
-  const verifyRes = await fetch("https://api.ariyava.in/verify-payment", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(payload)
-  });
-
-  const verifyData = await verifyRes.json();
-
-  console.log("VERIFY RESPONSE:", verifyData);
-
-  if (verifyData.success) {
-    window.location.href = "/success.html?id=" + verifyData.id;
-  } else {
-    alert("Payment verification failed");
-  }
-},
-
-  modal: {
-    ondismiss: function() {
-      btn.disabled = false;
-      btn.textContent = "Apply & Pay";
+    // ✅ Re-enable if user closes popup without paying
+    modal: {
+      ondismiss: function() {
+        btn.disabled = false;
+        btn.textContent = "Apply & Pay ₹600";
+      }
     }
-  },
-
-  theme: {
-    color: "#5f2d8e"
-  }
-};
+  };
 
   new Razorpay(options).open();
 });
 </script>
-
 </body>
 </html>
