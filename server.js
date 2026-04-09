@@ -276,7 +276,7 @@ app.get("/download-user-pdf/:id", (req, res) => {
   doc.text(`Warm greetings of the year!!!!!`);
   doc.text(`Application ID: ${formattedId}`);
   doc.text(`Payment ID: ${r.payment_id}`);
-  doc.text(`Amount Paid : 600`);
+  doc.text(`Amount Paid : 600 (include all tax)`);
   doc.moveDown();
 
   const drawRow = (label, value, y) => {
