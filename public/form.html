@@ -180,6 +180,12 @@ document.getElementById("admissionForm").addEventListener("submit", async (e) =>
     name: "Ariyava School",
     description: "Admission Application Fee",
 
+    prefill: {
+    name: data.name,
+    email: data.email || "",
+    contact: data.mobile
+  },
+
     handler: async function (response) {
       try {
         // ✅ Step 3: Verify and save
