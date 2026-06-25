@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const path = require("path");
 const session = require("express-session");
 const cors = require("cors");
+const ws = require("ws");
 
 const PDFDocument = require("pdfkit");
 const ExcelJS = require("exceljs");
@@ -25,7 +26,12 @@ app.use(session({
 // ✅ SUPABASE
 const supabase = createClient(
   "https://kxgupcilyyewiwrkxxcc.supabase.co",
-  "sb_publishable_O591uVWmqMqhZj3tQ-x6iQ_MTsZS3nV"
+  "YOUR_SUPABASE_KEY",
+  {
+    realtime: {
+      transport: ws
+    }
+  }
 );
 
 // ✅ Razorpay
